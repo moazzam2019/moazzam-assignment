@@ -52,13 +52,10 @@ const Exit = () => {
     setNumberPlate(event.target.value);
   };
 
-  const [prevstation, SetPrevStation] = useState("");
-
   const [date, setDate] = useState(new Date());
 
   const getData = () => {
-    var dateTime = new Date();
-    const currentDay = weekdays[dateTime.getDay()];
+    const currentDay = weekdays[date.getDay()];
     axios
       .get(API)
       .then((res) => {
@@ -69,12 +66,11 @@ const Exit = () => {
         console.log(res.data[index].number_plate);
         console.log(index); // Prints: 1
         console.log(res.data[index].station);
-        SetPrevStation(res.data[index].station);
+        let prevstation = res.data[index].station;
         if (["Saturday", "Sunday"].includes(currentDay)) {
           setBill(
-            1.5 *
-              (20 +
-                0.2 * Math.abs(distance[newstation] - distance[prevstation]))
+            20 +
+              1.5 * 0.2 * Math.abs(distance[newstation] - distance[prevstation])
           );
         } else {
           setBill(
@@ -85,6 +81,7 @@ const Exit = () => {
       .catch((err) => {
         console.log(err);
       });
+    console.log(bill);
   };
 
   return (
